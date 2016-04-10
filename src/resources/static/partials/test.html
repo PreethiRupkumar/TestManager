@@ -1,0 +1,27 @@
+<div ng-controller="testController" ng-init="submit()">
+	<h1 class="page-header">Video List</h1>
+	<div class="row">
+		<div class="col-md-12">
+			<p>
+		       <label>Enter User Name</label>
+		       <input type = "text" id = "username" value = "rupkumar" />
+		       </p>
+		       <p>
+		             <label>Select Style Tag</label>
+		              <select id="styleID" name="TagID">
+		             <option value="1">1</option>
+		             <option value="2">2</option>
+		             <option value="3">3</option>
+		             <option value="4">4</option>
+		           </select>
+		    </p>
+		    <p>
+		       <button onclick="load()">Submit</button>
+		    </p>
+		    <p>
+		       <label>Output</label>
+		       <div id="showHandle"></div>
+		    </p>
+		</div>
+	</div>
+</div>
