@@ -1,6 +1,13 @@
 (function(angular, _) {
 	angular.module("testManager.controllers").controller("testController", function($http, $scope, updateService, $rootScope, $log, $location) {
 		
+		$scope.formatted="<b>@Rupkumar</b>";
+		
+		$scope.$on( "receivedFormatted", function(event, args) {
+            console.log( 'new page content received after DB call' );
+            $scope.formatted = args.htmlStrFromDB;
+        });
+		
 		$scope.submit = function() {
 			$http.get("/api/getTagList").then(function(response) {
 				console.log(response.data.tagList);
@@ -20,15 +27,21 @@
 			});
 		}
 		
-		$scope.apply = function() {
-			var show = document.getElementById("show").value;
+		$scope.format = function() {
 			var tagSelect = document.getElementById("tag").value;
 			var handleSelect = document.getElementById("handle").value;
 			var output = tagSelect.replace("[xxx]", handleSelect);
-			show.innerHTML=output;
+			console.log("output = " + output);
+			$scope.formatted=output;
+			console.log($scope.formatted);
+			
+			var div = document.getElementById("display");
+			var para = document.createElement("p");
+	        div.appendChild(para);
 		}
+		
+		
 	});
-	
 	
 	
 	angular.module("testManager.controllers").controller("headerController", function($scope, updateService, $rootScope, $log, $location) {

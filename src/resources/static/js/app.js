@@ -1,6 +1,6 @@
 (function(angular) {
 
-	angular.module('testManager',["testManager.controllers","testManager.services", "ngRoute", "ngHandsontable", "ngFileUpload"]);
+	angular.module('testManager',["testManager.controllers","testManager.services", "ngRoute", "ngHandsontable", "ngFileUpload",'ngSanitize']);
 	angular.module("testManager.controllers", []);
 	angular.module("testManager.services", []);
 
