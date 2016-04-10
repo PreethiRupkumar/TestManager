@@ -1,27 +1,19 @@
 package com.test.db;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
-import com.mongodb.gridfs.GridFS;
-import com.mongodb.gridfs.GridFSDBFile;
-import com.mongodb.gridfs.GridFSInputFile;
-import com.test.model.GetTagList;
+import com.test.model.DBDataResponse;
 
 public class TestDAO{
 	
@@ -30,15 +22,27 @@ public class TestDAO{
 	@Autowired
 	private MongoClient mongoClient;
 	
-	public GetTagList getTagList() {
+	public DBDataResponse getDBData() {
 		List<String> tagList = new ArrayList<String>();
+		List<String> handleList = new ArrayList<String>();
+		
 		DB tagdb = mongoClient.getDB("tagdb");
 		DBCursor cursor = tagdb.getCollection("tagList").find();
 		while(cursor.hasNext()){
 			BasicDBObject document = (BasicDBObject)cursor.next();
-			tagList.add(document.getString("tagId"));
+			tagList.add(document.getString("tag"));
 		}
-		return new GetTagList(tagList);
+		LOG.info("taglist =" + tagList);
+		
+		DB handledb = mongoClient.getDB("handledb");
+		cursor = handledb.getCollection("handleList").find();
+		while(cursor.hasNext()){
+			BasicDBObject document = (BasicDBObject)cursor.next();
+			handleList.add(document.getString("handle"));
+		}
+		LOG.info("handlelist =" + handleList);
+
+		return new DBDataResponse(handleList, tagList);
 	}
 
 	public static void main(String... args) {
@@ -48,17 +52,46 @@ public class TestDAO{
 	
 		DBCollection tagTable = tagdb.getCollection("tagList");
 		
-		BasicDBObject document = new BasicDBObject();
-		document.put("tagId", "1");
-		document.put("htmlTag", "<b>");
-		tagTable.insert(document);
+		BasicDBObject document1 = new BasicDBObject();
+		document1.put("tag", "<b>[xxx]</b>");
+		tagTable.insert(document1);
 		
-		DB userdb = mongo.getDB("userdb");
-		DBCollection userTable = userdb.getCollection("userList");
+		BasicDBObject document2 = new BasicDBObject();
+		document2.put("tag", "<b><u>[xxx]</b></u>");
+		tagTable.insert(document2);
+
+		BasicDBObject document3 = new BasicDBObject();
+		document3.put("tag", "<b><i>[xxx]</b></i>");
+		tagTable.insert(document3);
+
 		
-		BasicDBObject user = new BasicDBObject();
-		document.put("username", "rupkumar");
-		document.put("handle", "@Rupkumar");
-		userTable.insert(document);
+		DB handledb = mongo.getDB("handledb");
+		DBCollection handleTable = handledb.getCollection("handleList");
+		
+		BasicDBObject handle1 = new BasicDBObject();
+		handle1.put("handle", "@Rupkumar");
+		handleTable.insert(handle1);
+		
+		BasicDBObject handle2 = new BasicDBObject();
+		handle2.put("handle", "@Harry");
+		handleTable.insert(handle2);
+		
+		BasicDBObject handle3 = new BasicDBObject();
+		handle3.put("handle", "@Peter");
+		handleTable.insert(handle3);
+		
+		
+		DBCursor cursor = tagdb.getCollection("tagList").find();
+		while(cursor.hasNext()){
+			BasicDBObject tag = (BasicDBObject)cursor.next();
+			System.out.println(tag.getString("tag"));
+		}
+		
+		cursor = handledb.getCollection("handleList").find();
+		while(cursor.hasNext()){
+			BasicDBObject handle = (BasicDBObject)cursor.next();
+			System.out.println(handle.getString("handle"));
+		}
+
 	}
 }

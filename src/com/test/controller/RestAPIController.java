@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.test.db.TestDAO;
-import com.test.model.GetTagList;
+import com.test.model.DBDataResponse;
 
 
 @RestController
@@ -21,12 +21,12 @@ public class RestAPIController {
 	private static final Log LOG = LogFactory.getLog(RestAPIController.class);
 
 	@RequestMapping("/api/getTagList")
-	public Callable<GetTagList> getUserVideoList(@PathVariable String user) {
-		return new Callable<GetTagList>() {
+	public Callable<DBDataResponse> getUserVideoList() {
+		return new Callable<DBDataResponse>() {
 			@Override
-			public GetTagList call() throws Exception {
-				GetTagList response = testDAO.getTagList();
-				LOG.info("Recieved tagList from Services: " + response);
+			public DBDataResponse call() throws Exception {
+				DBDataResponse response = testDAO.getDBData();
+				LOG.info("Recieved data from Services: " + response);
 				return response;
 			}
 		};
