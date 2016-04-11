@@ -7,7 +7,7 @@
 	angular.module("testManager").config(function($routeProvider) {
 		$routeProvider.when('/', {     
 			redirectTo: function () {
-				return "/showvideos";
+				return "/test";
 			}
 		}).when('/test', {
             templateUrl : 'partials/test.html',
